@@ -1,0 +1,39 @@
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+import os
+
+
+@dataclass(slots=True)
+class Settings:
+    skill_names: list[str] = field(default_factory=list)
+    allow_dangerous_browser_actions: bool = False
+    browser_headless: bool = True
+    model_name: str = "google/gemini-3-flash-preview"
+    openrouter_api_key: str | None = None
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
+    telegram_bot_token: str | None = None
+    telegram_chat_id: str | None = None
+
+    @classmethod
+    def from_args(
+        cls,
+        *,
+        skill_names: list[str],
+        allow_dangerous_browser_actions: bool,
+        model_name: str | None,
+        browser_headless: bool,
+    ) -> "Settings":
+        api_key = os.environ.get("OPENROUTER_API_KEY")
+        if not api_key:
+            raise RuntimeError("Set OPENROUTER_API_KEY before running purobot.")
+        return cls(
+            skill_names=skill_names,
+            allow_dangerous_browser_actions=allow_dangerous_browser_actions,
+            browser_headless=browser_headless,
+            model_name=model_name
+            or os.environ.get("CODBOT_MODEL", "google/gemini-3-flash-preview"),
+            openrouter_api_key=api_key,
+            telegram_bot_token=os.environ.get("TELEGRAM_BOT_TOKEN"),
+            telegram_chat_id=os.environ.get("TELEGRAM_CHAT_ID"),
+        )

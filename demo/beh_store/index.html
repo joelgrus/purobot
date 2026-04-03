@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>B-E-H | B. E. Hutt Grocery Delivery</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <div class="utility-bar">
+        <div class="utility-bar__left">
+          <span>Departments</span>
+          <span>Weekly Ad</span>
+          <span>Curbside</span>
+          <span>Delivery</span>
+        </div>
+        <div class="utility-bar__right">
+          <span>San Antonio, TX 78258</span>
+          <span>Delivery in 2 hours</span>
+        </div>
+      </div>
+
+      <div class="masthead panel">
+        <div class="brand-lockup">
+          <p class="brand-lockup__eyebrow">B. E. Hutt Grocery Co.</p>
+          <h1>B-E-H</h1>
+        </div>
+        <div class="masthead__meta">
+          <div class="service-chip service-chip--strong">Delivery to 78258</div>
+          <div class="service-chip">Substitutions on</div>
+          <div class="service-chip">Pickup available</div>
+        </div>
+      </div>
+
+      <div class="promo-strip">
+        <div class="promo-strip__primary">
+          <p class="eyebrow">Fresh and fast</p>
+          <h2>Same-day groceries from your neighborhood B-E-H</h2>
+          <p class="promo-strip__copy">
+            Search the aisles, build a cart, review checkout, and place an order in a realistic demo flow.
+          </p>
+        </div>
+        <div class="promo-strip__cards">
+          <div class="promo-card">
+            <p class="promo-card__label">Popular tonight</p>
+            <strong>Pasta night staples</strong>
+            <span>Spaghetti, garlic, olive oil, parmesan, basil</span>
+          </div>
+          <div class="promo-card">
+            <p class="promo-card__label">Store features</p>
+            <strong>212 items in stock</strong>
+            <span>Produce, pantry, dairy, meats, bakery, breakfast, home</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="storefront">
+        <div class="toolbar panel">
+          <div class="search-box">
+            <label for="store-search" class="toolbar__label">Search B-E-H</label>
+            <div class="search-row">
+              <input
+                id="store-search"
+                name="store-search"
+                type="search"
+                placeholder="Search milk, spaghetti, chicken thighs, basil..."
+                autocomplete="off"
+              >
+              <button id="clear-search" type="button" class="button button--ghost">Clear</button>
+            </div>
+          </div>
+          <div class="toolbar__meta">
+            <div>
+              <p class="toolbar__label">Shop by department</p>
+              <div id="category-pills" class="pill-row" aria-label="Departments"></div>
+            </div>
+            <div>
+              <p class="toolbar__label">Search results</p>
+              <p id="results-count" class="toolbar__value">0 items</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="panel panel--tight" aria-labelledby="results-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Search results</p>
+              <h2 id="results-heading">Store inventory</h2>
+            </div>
+            <p id="search-status" class="section-note">Showing full catalog.</p>
+          </div>
+          <div id="product-grid" class="product-grid"></div>
+        </section>
+
+        <section class="panel panel--tight" aria-labelledby="highlights-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Shop popular picks</p>
+              <h2 id="highlights-heading">Quick picks</h2>
+            </div>
+            <p class="section-note">Easy targets for recipe-based shopping runs.</p>
+          </div>
+          <div class="highlights" id="quick-picks"></div>
+        </section>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel cart-panel">
+          <div class="section-heading section-heading--stacked">
+            <div>
+              <p class="eyebrow">Your order</p>
+              <h2>Cart</h2>
+            </div>
+            <p id="cart-summary" class="cart-summary">Cart has 0 items.</p>
+          </div>
+
+          <div id="cart-items" class="cart-items" aria-live="polite"></div>
+
+          <div class="totals">
+            <div><span>Subtotal</span><strong id="subtotal">$0.00</strong></div>
+            <div><span>Delivery</span><strong id="delivery-fee">$7.95</strong></div>
+            <div><span>Estimated tax</span><strong id="tax-total">$0.00</strong></div>
+            <div class="totals__grand"><span>Total</span><strong id="grand-total">$7.95</strong></div>
+          </div>
+
+          <button id="start-checkout" class="button button--primary" type="button">Review Checkout</button>
+          <p id="status" class="status">Browse the aisles and add items to your cart.</p>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <div id="checkout-modal" class="checkout-modal" hidden>
+    <div class="checkout-backdrop" id="close-checkout"></div>
+    <div class="checkout-sheet panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Checkout</p>
+          <h2>Review your B-E-H delivery</h2>
+        </div>
+        <button id="close-checkout-button" class="button button--ghost" type="button">Keep shopping</button>
+      </div>
+
+      <div class="checkout-grid">
+        <section class="checkout-card">
+          <h3>Delivery address</h3>
+          <p id="checkout-address">123 Demo Drive, San Antonio, TX 78258</p>
+          <p class="muted">Leave at front door if no one answers.</p>
+        </section>
+
+        <section class="checkout-card">
+          <h3>Delivery window</h3>
+          <p id="delivery-window">Today, 6:00 PM - 7:00 PM</p>
+          <p class="muted">Shopper substitutions enabled.</p>
+        </section>
+
+        <section class="checkout-card">
+          <h3>Payment</h3>
+          <p id="payment-method">Visa ending in 4242</p>
+          <p class="muted">Promo applied: FREEFRESH5</p>
+        </section>
+
+        <section class="checkout-card checkout-card--wide">
+          <h3>Order review</h3>
+          <div id="checkout-items" class="checkout-items"></div>
+        </section>
+      </div>
+
+      <div class="checkout-footer">
+        <div>
+          <p class="muted">Final total</p>
+          <strong id="checkout-total">$7.95</strong>
+        </div>
+        <button id="submit-order" class="button button--danger" type="button">Place Order</button>
+      </div>
+      <p id="checkout-status" class="status status--checkout">Final order submission happens here.</p>
+    </div>
+  </div>
+
+  <script src="./catalog.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
