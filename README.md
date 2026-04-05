@@ -1,6 +1,6 @@
 # Purobot
 
-Purobot is a small Python agent framework for a meetup talk. It uses a real OpenRouter model, a generic browser tool, optional `SKILL.md` skills, and a fake B-E-H storefront you can point it at explicitly.
+Purobot is a small Python agent framework for a meetup talk. It uses a real OpenRouter model, a generic browser tool, drop-in Markdown commands, and a fake B-E-H storefront you can point it at explicitly.
 
 ## Current scope
 
@@ -11,7 +11,7 @@ This repository currently includes:
 - an OpenRouter-backed LLM adapter
 - a Playwright-backed browser tool with action-level approval policy
 - an optional Telegram polling channel that shares the same session as the console
-- optional filesystem-loaded `SKILL.md` skills for demo-specific behavior
+- drop-in Markdown commands under `commands/`
 - a richer fake grocery site at `demo/beh_store/` for local iteration and live demos
 
 ## Run
@@ -61,16 +61,16 @@ Optionally lock it to your personal chat:
 export TELEGRAM_CHAT_ID=...
 ```
 
-Activate any optional skill:
+List available commands:
 
 ```bash
-uv run python -m purobot.cli --skill some_skill_name
+ /commands
 ```
 
-The main demo-friendly skill is:
+Example command:
 
 ```bash
-uv run python -m purobot.cli --skill operator_mode --show-browser
+/alliteration-recipe b
 ```
 
 Serve the demo store yourself when you want shopping behavior:
@@ -86,4 +86,4 @@ python -m http.server 8888
 Use http://localhost:8888 to shop for pasta tonight with 1 lb spaghetti, 2 cloves garlic, olive oil, parmesan, and basil
 ```
 
-The current implementation is intentionally simple. The model will not know about the store unless you explicitly tell it which URL to use. `operator_mode` is useful for live demos because it makes the browser workflow easier to follow on screen.
+The current implementation is intentionally simple. The model will not know about the store unless you explicitly tell it which URL to use. Commands are loaded from Markdown files so new command behavior can be added without changing the core loop.

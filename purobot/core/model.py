@@ -71,9 +71,14 @@ def build_messages(session: Session) -> list[dict[str, Any]]:
 
 
 def _system_prompt(session: Session) -> str:
-    skill_blocks = "\n\n".join(
-        f"[skill:{skill.name}]\n{skill.instructions}" for skill in session.active_skills
-    )
+    command = session.active_command
+    command_block = ""
+    if command is not None:
+        command_block = (
+            f"[command:{command['name']}]\n"
+            f"args: {json.dumps(command['args'])}\n"
+            f"{command['instructions']}\n\n"
+        )
     browser_context = json.dumps(session.state.get("browser", {}), indent=2, sort_keys=True)
     return (
         "You are Purobot, a small tool-using assistant. "
@@ -83,7 +88,7 @@ def _system_prompt(session: Session) -> str:
         "Only use the browser when the user explicitly asks you to browse, search the web, open a site, use a URL, interact with a website, or when live page interaction is actually necessary. "
         "Only mark `dangerous=true` for irreversible actions like submitting an order. "
         "Be concise. If you have enough information to help without tools, answer directly.\n\n"
-        f"Active skills:\n{skill_blocks or '[skill:none]'}\n\n"
+        f"{command_block}"
         f"Browser state:\n{browser_context}\n\n"
         "Use whatever URLs or sites the user explicitly gives you. "
         "Prefer reading the page before taking blind actions."

@@ -6,9 +6,6 @@ class ConsoleChannel:
 
     def run(self) -> None:
         print("Purobot console mode. Type `exit` to quit.")
-        if self.app.session.active_skills:
-            names = ", ".join(skill.name for skill in self.app.session.active_skills)
-            print(f"Active skills: {names}")
 
         while True:
             try:

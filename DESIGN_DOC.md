@@ -24,7 +24,7 @@ Purobot is a local Python app with:
 - one generic browser tool powered by Playwright
 - one shared session
 - multiple channels into that same session
-- optional `SKILL.md` instructions for demo-specific behavior
+- optional Markdown commands for demo-specific behavior
 
 It is intentionally synchronous and simple.
 
@@ -58,7 +58,7 @@ The lock exists so console and Telegram do not step on each other while the agen
 `Session` stores:
 
 - plain message history as dicts
-- active skills
+- one active command context when a slash command is running
 - one pending approval
 - small transient browser state
 
@@ -106,21 +106,21 @@ It is a generic browser tool, not a grocery-specific tool.
 
 The browser tool should only be used when the user explicitly wants site interaction or when live page interaction is actually necessary.
 
-### Skills
+### Commands
 
-Skills are optional.
+Commands are optional extensions invoked through slash syntax.
 
 They are loaded from:
 
-- `skills/<name>/SKILL.md`
+- `commands/<name>.md`
 
-Skills are not the center of the architecture. They are a light prompt-layer specialization mechanism.
+Commands are not Python plugin functions. They are Markdown instruction files that become temporary command context for a single run.
 
-The current interesting skill is:
+Example:
 
-- `operator_mode`
+- `/alliteration-recipe b`
 
-That skill makes the agent narrate its browser behavior more clearly for a live audience.
+This loads `commands/alliteration-recipe.md`, passes the command arguments into prompt context, and runs that command through the normal model and tool loop.
 
 ## Demo Website
 
@@ -187,7 +187,7 @@ This is why:
 
 - console output is readable
 - Telegram traffic is mirrored into the terminal
-- `operator_mode` exists
+- commands are explicit and easy to demo
 - approval messages are explicit
 
 ### 4. Keep the dependency surface small
@@ -214,14 +214,13 @@ purobot/
     agent.py
     model.py
     session.py
-  skills/
+  commands/
     loader.py
   tools/
     base.py
     browser.py
-skills/
-  operator_mode/
-    SKILL.md
+commands/
+  alliteration-recipe.md
 demo/
   beh_store/
 ```
@@ -243,7 +242,7 @@ Currently out of scope:
 Recommended talk flow:
 
 1. run Purobot on the laptop
-2. optionally enable Telegram and `operator_mode`
+2. optionally enable Telegram
 3. serve the local B-E-H site on `localhost:8888`
 4. tell Purobot explicitly to use that site
 5. watch the browser automation on the laptop
@@ -255,4 +254,4 @@ This gives a clear story:
 - real browser tool
 - real phone integration
 - explicit human approval
-- optional behavioral specialization through a skill
+- optional behavioral specialization through dropped-in Markdown commands

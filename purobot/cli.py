@@ -14,12 +14,6 @@ load_dotenv()
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Purobot CLI")
     parser.add_argument(
-        "--skill",
-        action="append",
-        default=[],
-        help="Skill name to activate from the skills/ directory.",
-    )
-    parser.add_argument(
         "--allow-dangerous-browser-actions",
         action="store_true",
         help="Allow dangerous browser actions after explicit approval.",
@@ -46,7 +40,6 @@ def main() -> None:
     args = parser.parse_args()
 
     settings = Settings.from_args(
-        skill_names=args.skill,
         allow_dangerous_browser_actions=args.allow_dangerous_browser_actions,
         model_name=args.model,
         browser_headless=not args.show_browser,

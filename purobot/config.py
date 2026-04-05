@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import os
 
 
 @dataclass(slots=True)
 class Settings:
-    skill_names: list[str] = field(default_factory=list)
     allow_dangerous_browser_actions: bool = False
     browser_headless: bool = True
     model_name: str = "google/gemini-3-flash-preview"
@@ -19,7 +18,6 @@ class Settings:
     def from_args(
         cls,
         *,
-        skill_names: list[str],
         allow_dangerous_browser_actions: bool,
         model_name: str | None,
         browser_headless: bool,
@@ -28,7 +26,6 @@ class Settings:
         if not api_key:
             raise RuntimeError("Set OPENROUTER_API_KEY before running purobot.")
         return cls(
-            skill_names=skill_names,
             allow_dangerous_browser_actions=allow_dangerous_browser_actions,
             browser_headless=browser_headless,
             model_name=model_name

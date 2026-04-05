@@ -4,13 +4,11 @@ from dataclasses import dataclass, field
 import json
 from typing import Any
 
-from purobot.skills.loader import Skill
-
 
 @dataclass(slots=True)
 class Session:
     messages: list[dict[str, Any]] = field(default_factory=list)
-    active_skills: list[Skill] = field(default_factory=list)
+    active_command: dict[str, Any] | None = None
     pending_approval: dict[str, Any] | None = None
     state: dict[str, Any] = field(default_factory=dict)
 
