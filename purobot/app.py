@@ -19,7 +19,7 @@ class App:
 
     @classmethod
     def from_settings(cls, settings) -> "App":
-        session = Session()
+        session = Session(max_history_messages=settings.max_history_messages)
         browser = BrowserTool(
             allow_dangerous_actions=settings.allow_dangerous_browser_actions,
             headless=settings.browser_headless,

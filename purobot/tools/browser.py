@@ -32,6 +32,7 @@ class BrowserTool:
         )
 
     def run(self, arguments: dict[str, Any], session) -> ToolResult:
+        arguments = self._normalize_arguments(arguments)
         action = arguments["action"]
         browser_session = self._get_session()
         page = browser_session.page
@@ -140,7 +141,33 @@ class BrowserTool:
         }
 
     def needs_approval(self, arguments: dict[str, Any]) -> bool:
+        arguments = self._normalize_arguments(arguments)
         return bool(arguments.get("dangerous")) and not self.allow_dangerous_actions
+
+    def _normalize_arguments(self, arguments: dict[str, Any]) -> dict[str, Any]:
+        normalized = dict(arguments)
+        action = normalized.get("action")
+        if not isinstance(action, str):
+            return normalized
+        if "," not in action:
+            return normalized
+
+        parts = [part.strip() for part in action.split(",") if part.strip()]
+        if not parts:
+            return normalized
+
+        normalized["action"] = parts[0]
+        for part in parts[1:]:
+            if "=" not in part:
+                continue
+            key, value = [item.strip() for item in part.split("=", 1)]
+            if value.lower() == "true":
+                normalized[key] = True
+            elif value.lower() == "false":
+                normalized[key] = False
+            else:
+                normalized[key] = value
+        return normalized
 
     def _get_session(self) -> BrowserSession:
         if self._session is not None:

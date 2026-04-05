@@ -18,6 +18,7 @@ class Agent:
 
     def handle_user_message(self, session: Session, text: str) -> list[str]:
         session.messages.append({"role": "user", "content": text})
+        session.prune_history()
 
         if session.pending_approval:
             return self._handle_approval_response(session, text)
@@ -30,6 +31,7 @@ class Agent:
             )
             if response["type"] == "text":
                 session.messages.append({"role": "assistant", "content": response["text"]})
+                session.prune_history()
                 outputs.append(response["text"])
                 return outputs
 
@@ -51,12 +53,14 @@ class Agent:
                         ],
                     }
                 )
+                session.prune_history()
                 tool = self.tools_by_name[response["name"]]
                 if tool.needs_approval(response["arguments"]):
                     response["id"] = tool_call_id
                     session.pending_approval = response
                     prompt = self._approval_prompt(response)
                     session.messages.append({"role": "assistant", "content": prompt})
+                    session.prune_history()
                     outputs.append(prompt)
                     return outputs
 
@@ -69,11 +73,13 @@ class Agent:
                         "content": result.render(),
                     }
                 )
+                session.prune_history()
                 outputs.append(f"[tool:{tool.name}] {result.summary}")
                 continue
 
         message = "Stopped after too many tool steps."
         session.messages.append({"role": "assistant", "content": message})
+        session.prune_history()
         outputs.append(message)
         return outputs
 
@@ -86,12 +92,14 @@ class Agent:
         if normalized not in {"approve", "reject"}:
             reminder = "Pending approval. Reply with `approve` or `reject`."
             session.messages.append({"role": "assistant", "content": reminder})
+            session.prune_history()
             return [reminder]
 
         if normalized == "reject":
             session.pending_approval = None
             denied = f"Cancelled `{pending['name']}`."
             session.messages.append({"role": "assistant", "content": denied})
+            session.prune_history()
             return [denied]
 
         tool = self.tools_by_name[pending["name"]]
@@ -106,15 +114,18 @@ class Agent:
                 "content": result.render(),
             }
         )
+        session.prune_history()
         final = f"Approved `{tool.name}`. {result.summary}"
         session.messages.append({"role": "assistant", "content": final})
+        session.prune_history()
         return [final]
 
     def _approval_prompt(self, response: dict[str, Any]) -> str:
         if response["name"] != "browser":
             return f"Approve `{response['name']}`? Reply `approve` or `reject`."
 
-        arguments = response["arguments"]
+        tool = self.tools_by_name["browser"]
+        arguments = tool._normalize_arguments(response["arguments"])
         action = arguments.get("action")
         if action == "open":
             target = arguments.get("url", "a URL")

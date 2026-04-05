@@ -7,10 +7,18 @@ from typing import Any
 
 @dataclass(slots=True)
 class Session:
+    max_history_messages: int = 100
     messages: list[dict[str, Any]] = field(default_factory=list)
     active_command: dict[str, Any] | None = None
     pending_approval: dict[str, Any] | None = None
     state: dict[str, Any] = field(default_factory=dict)
+
+    def prune_history(self) -> None:
+        if self.pending_approval:
+            return
+        if len(self.messages) <= self.max_history_messages:
+            return
+        self.messages = self.messages[-self.max_history_messages :]
 
     def last_user_message(self) -> str | None:
         for message in reversed(self.messages):

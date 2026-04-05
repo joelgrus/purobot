@@ -8,6 +8,7 @@ import os
 class Settings:
     allow_dangerous_browser_actions: bool = False
     browser_headless: bool = True
+    max_history_messages: int = 100
     model_name: str = "google/gemini-3-flash-preview"
     openrouter_api_key: str | None = None
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
@@ -28,6 +29,7 @@ class Settings:
         return cls(
             allow_dangerous_browser_actions=allow_dangerous_browser_actions,
             browser_headless=browser_headless,
+            max_history_messages=int(os.environ.get("PUROBOT_MAX_HISTORY_MESSAGES", "100")),
             model_name=model_name
             or os.environ.get("CODBOT_MODEL", "google/gemini-3-flash-preview"),
             openrouter_api_key=api_key,
