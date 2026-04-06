@@ -194,6 +194,7 @@ class BrowserTool:
             return {"value": locator.input_value()}
         raise ValueError(f"Unsupported read mode: {mode}")
 
+
     def _page_summary(self, page: Page) -> dict[str, Any]:
         buttons = page.evaluate(
             """

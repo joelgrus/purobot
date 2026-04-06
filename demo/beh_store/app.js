@@ -40,6 +40,10 @@ const elements = {
   closeCheckoutButton: document.querySelector("#close-checkout-button"),
   checkoutStatus: document.querySelector("#checkout-status"),
   submitOrder: document.querySelector("#submit-order"),
+  orderSuccess: document.querySelector("#order-success"),
+  orderSuccessCopy: document.querySelector("#order-success-copy"),
+  orderSuccessNumber: document.querySelector("#order-success-number"),
+  orderSuccessClose: document.querySelector("#order-success-close"),
 };
 
 function formatMoney(value) {
@@ -264,9 +268,22 @@ function closeCheckout() {
   elements.checkoutModal.hidden = true;
 }
 
+function closeOrderSuccess() {
+  elements.orderSuccess.hidden = true;
+}
+
 function placeOrder() {
   const orderNumber = `BEH-${Math.floor(100000 + Math.random() * 900000)}`;
+  const itemCount = state.cart.length;
+  const total = formatMoney(grandTotal());
   elements.checkoutStatus.innerHTML = `<strong>Order placed.</strong> Confirmation ${orderNumber}.`;
+  elements.orderSuccessNumber.textContent = orderNumber;
+  elements.orderSuccessCopy.innerHTML = `Your B-E-H order for <strong>${itemCount} item${itemCount === 1 ? "" : "s"}</strong> is confirmed. Total charged: <strong>${total}</strong>.`;
+  state.cart = [];
+  renderCart();
+  renderCheckout();
+  elements.checkoutModal.hidden = true;
+  elements.orderSuccess.hidden = false;
   setStatus(`<strong>Order submitted.</strong> Confirmation ${orderNumber}.`);
 }
 
@@ -298,6 +315,7 @@ function attachEvents() {
   elements.closeCheckout.addEventListener("click", closeCheckout);
   elements.closeCheckoutButton.addEventListener("click", closeCheckout);
   elements.submitOrder.addEventListener("click", placeOrder);
+  elements.orderSuccessClose.addEventListener("click", closeOrderSuccess);
 }
 
 function init() {

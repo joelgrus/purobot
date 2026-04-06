@@ -175,9 +175,31 @@
           <p class="muted">Final total</p>
           <strong id="checkout-total">$7.95</strong>
         </div>
-        <button id="submit-order" class="button button--danger" type="button">Place Order</button>
+        <button id="submit-order" class="button button--danger button--purchase" type="button">Place Order</button>
       </div>
       <p id="checkout-status" class="status status--checkout">Final order submission happens here.</p>
+    </div>
+  </div>
+
+  <div id="order-success" class="order-success" hidden>
+    <div class="order-success__glow"></div>
+    <div class="order-success__card panel">
+      <p class="eyebrow">Order complete</p>
+      <h2>Groceries are on the way</h2>
+      <p id="order-success-copy" class="order-success__copy">
+        Your B-E-H order has been placed.
+      </p>
+      <div class="order-success__meta">
+        <div>
+          <span class="order-success__label">Confirmation</span>
+          <strong id="order-success-number">BEH-000000</strong>
+        </div>
+        <div>
+          <span class="order-success__label">ETA</span>
+          <strong>45 minutes</strong>
+        </div>
+      </div>
+      <button id="order-success-close" class="button button--primary" type="button">Continue Shopping</button>
     </div>
   </div>
 
