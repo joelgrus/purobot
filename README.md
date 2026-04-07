@@ -22,10 +22,6 @@ This repository currently includes:
 
 ## Run
 
-```bash
-uv run python -m purobot.cli
-```
-
 Install browser support first:
 
 ```bash
@@ -33,10 +29,34 @@ uv sync
 uv run playwright install chromium
 ```
 
-Use OpenRouter through the official `openai` client:
+## Environment
+
+Required:
 
 ```bash
 export OPENROUTER_API_KEY=...
+```
+
+Optional:
+
+```bash
+export PUROBOT_MAX_HISTORY_MESSAGES=100
+export TELEGRAM_BOT_TOKEN=...
+export TELEGRAM_CHAT_ID=...
+```
+
+What they do:
+
+- `OPENROUTER_API_KEY`: required for all model calls
+- `PUROBOT_MAX_HISTORY_MESSAGES`: keep only the last `N` session messages, default `100`
+- `TELEGRAM_BOT_TOKEN`: required only if you use `--telegram`
+- `TELEGRAM_CHAT_ID`: optional Telegram allowlist for your personal chat
+
+## Local Run
+
+Use OpenRouter through the official `openai` client:
+
+```bash
 uv run python -m purobot.cli
 ```
 
@@ -66,6 +86,51 @@ Optionally lock it to your personal chat:
 ```bash
 export TELEGRAM_CHAT_ID=...
 ```
+
+## Telegram Setup
+
+1. In Telegram, message `@BotFather`.
+2. Run `/newbot`.
+3. Pick a bot name and username.
+4. Copy the bot token BotFather gives you.
+5. Export it locally:
+
+```bash
+export TELEGRAM_BOT_TOKEN=...
+```
+
+6. Start a chat with your bot from your phone and send it a message like `hello`.
+7. Verify the token works:
+
+```bash
+curl "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/getMe"
+```
+
+8. Fetch your chat ID:
+
+```bash
+curl "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/getUpdates"
+```
+
+9. Look for:
+
+```json
+"chat":{"id":123456789,...}
+```
+
+10. Export that value if you want to restrict the bot to just your chat:
+
+```bash
+export TELEGRAM_CHAT_ID=123456789
+```
+
+11. Run Purobot with Telegram enabled:
+
+```bash
+uv run python -m purobot.cli --telegram --show-browser
+```
+
+Telegram messages will show up in the terminal, and browser actions will still run locally on your laptop.
 
 List available commands:
 
