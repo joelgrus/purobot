@@ -2,6 +2,12 @@
 
 Purobot is a small Python agent framework for a meetup talk. It uses a real OpenRouter model, a generic browser tool, drop-in Markdown commands, and a fake B-E-H storefront you can point it at explicitly.
 
+## Slides
+
+I built this for a talk at the Alamo Python meetup in April 2026.
+
+The slides for the talk are [here](https://docs.google.com/presentation/d/1oERg-NhjfDZCth6ALQrZ03bXx6Ede0NjxMPuBWNVZkI/edit?usp=sharing)
+
 ## Current scope
 
 This repository currently includes:
